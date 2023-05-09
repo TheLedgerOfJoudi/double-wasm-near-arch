@@ -1,5 +1,6 @@
 import 'regenerator-runtime/runtime';
 import { Wallet } from './near-wallet';
+import init, { tick } from "../wasm-modules/pkg/wasm_modules.js";
 
 const CONTRACT_ADDRESS = process.env.CONTRACT_NAME;
 
@@ -44,6 +45,10 @@ async function setInfo(event) {
 async function getToken() {
   // use the wallet to query the Smart Contract
   const currentToken = await wallet.viewMethod({ method: 'get_token', args: {owner_id: account }, contractId: CONTRACT_ADDRESS });
+
+  init().then(() => {
+    tick("seed");
+  });
 
   // handle UI stuff
   document.querySelectorAll('[data-behavior=token]').forEach(el => {
