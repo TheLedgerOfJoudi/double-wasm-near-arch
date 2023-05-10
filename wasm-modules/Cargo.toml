@@ -11,3 +11,4 @@ crate-type = ["cdylib", "rlib"]
 wasm-bindgen = "0.2.84"
 sha256 = "1.1.3"
 to-binary = "0.4.0"
+console_error_panic_hook = {git = "https://github.com/rustwasm/console_error_panic_hook"}

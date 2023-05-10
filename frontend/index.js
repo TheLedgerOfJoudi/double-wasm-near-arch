@@ -1,13 +1,13 @@
 import 'regenerator-runtime/runtime';
 import { Wallet } from './near-wallet';
-import init, { tick } from "../wasm-modules/pkg/wasm_modules.js";
+import init, { Grid } from "../wasm-modules/pkg/wasm_modules.js";
 
 const CONTRACT_ADDRESS = process.env.CONTRACT_NAME;
-
 // When creating the wallet you can optionally ask to create an access key
 // Having the key enables to call non-payable methods without interrupting the user to sign
 const wallet = new Wallet({ createAccessKeyFor: CONTRACT_ADDRESS })
 let account = ""
+let current = ""
 // Setup on page load
 window.onload = async () => {
   let isSignedIn = await wallet.startUp();
@@ -22,8 +22,13 @@ window.onload = async () => {
 
 // Button clicks
 document.querySelector('form').onsubmit = setInfo;
+document.querySelector('form').oninput = changeGrid;
 document.querySelector('#sign-in-button').onclick = () => { wallet.signIn(); };
 document.querySelector('#sign-out-button').onclick = () => { wallet.signOut(); };
+
+function changeGrid(event) {
+  current = event.target.value
+}
 
 async function setInfo(event) {
   // handle UI
@@ -44,11 +49,7 @@ async function setInfo(event) {
 
 async function getToken() {
   // use the wallet to query the Smart Contract
-  const currentToken = await wallet.viewMethod({ method: 'get_token', args: {owner_id: account }, contractId: CONTRACT_ADDRESS });
-
-  init().then(() => {
-    tick("seed");
-  });
+  const currentToken = await wallet.viewMethod({ method: 'get_token', args: { owner_id: account }, contractId: CONTRACT_ADDRESS });
 
   // handle UI stuff
   document.querySelectorAll('[data-behavior=token]').forEach(el => {
@@ -71,3 +72,17 @@ function signedInFlow() {
     el.innerText = wallet.accountId;
   });
 }
+
+init().then(() => {
+  const pre = document.getElementById("wasm-render");
+  const grid = Grid.new()
+
+  const renderLoop = () => {
+    pre.textContent = ""
+    pre.textContent = grid.render();
+    grid.tick(current);
+    requestAnimationFrame(renderLoop);
+  };
+
+  requestAnimationFrame(renderLoop);
+})

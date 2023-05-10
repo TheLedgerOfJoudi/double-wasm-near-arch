@@ -24,6 +24,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "console_error_panic_hook"
+version = "0.1.6"
+source = "git+https://github.com/rustwasm/console_error_panic_hook#4dc30a5448ed3ffcfb961b1ad54d000cca881b84"
+dependencies = [
+ "cfg-if",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "cpufeatures"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -224,6 +233,7 @@ checksum = "0046fef7e28c3804e5e38bfa31ea2a0f73905319b677e57ebe37e49358989b5d"
 name = "wasm-modules"
 version = "0.1.0"
 dependencies = [
+ "console_error_panic_hook",
  "sha256",
  "to-binary",
  "wasm-bindgen",

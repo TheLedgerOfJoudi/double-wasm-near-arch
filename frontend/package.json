@@ -4,7 +4,9 @@
   "license": "(MIT AND Apache-2.0)",
   "scripts": {
     "start": "./start.sh",
-    "build": "parcel build index.html --public-url ./"
+    "build": "parcel build index.html --public-url ./",
+    "clean": "rm -rf .parcel-cache",
+    "dev": "npm run clean && npm run build && npm run start"
   },
   "devDependencies": {
     "buffer": "^5.7.1",
